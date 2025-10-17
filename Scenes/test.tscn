@@ -2,13 +2,13 @@
 
 [ext_resource type="PackedScene" uid="uid://y0rpm7kbjq7k" path="res://Audio/SoundController/SoundManager.tscn" id="1_2cgwh"]
 [ext_resource type="Texture2D" uid="uid://b2sj05bpwqe4r" path="res://icon.svg" id="1_8od7v"]
-[ext_resource type="Script" uid="uid://orcsg6jou2lg" path="res://Player/PlayerController.cs" id="2_35xla"]
 [ext_resource type="Script" uid="uid://c7k44gmh4bkla" path="res://StateMachine/States/IdleState.cs" id="3_i3aeo"]
 [ext_resource type="Script" uid="uid://buu5kr5termgt" path="res://StateMachine/States/RunState.cs" id="4_5wyu1"]
 [ext_resource type="Script" uid="uid://p5m53nuvlumw" path="res://StateMachine/States/DashState.cs" id="5_0c07c"]
 [ext_resource type="Script" uid="uid://dsn6ndtay4j4o" path="res://AI/BlackSwan.cs" id="6_0c07c"]
 [ext_resource type="Script" uid="uid://b5v3bepxkayu7" path="res://AI/States/Phase1/SweepAttack.cs" id="7_2cgwh"]
 [ext_resource type="Script" uid="uid://1yxoby74dj08" path="res://AI/States/Phase1/SummonDancers.cs" id="8_iaow0"]
+[ext_resource type="Script" uid="uid://3jcbejg6wicl" path="res://AI/States/Phase1/Phase1.cs" id="8_yb21e"]
 [ext_resource type="Script" uid="uid://d3hr455btscyu" path="res://AI/States/Phase1/ShootFeathers.cs" id="10_qpfo2"]
 [ext_resource type="Script" uid="uid://dwqvk8ritp8w7" path="res://AI/States/Phase1/RadiateFeathers.cs" id="11_yb21e"]
 
@@ -48,14 +48,7 @@ offset_right = 24.0
 offset_bottom = -90.0
 text = "test"
 
-[node name="StateMachine" type="Node" parent="Player" node_paths=PackedStringArray("runState", "idleState", "dashState", "body", "animator", "label")]
-script = ExtResource("2_35xla")
-runState = NodePath("Run")
-idleState = NodePath("Idle")
-dashState = NodePath("Dash")
-body = NodePath("../CharacterBody2D")
-animator = NodePath("../CharacterBody2D/Sprite2D")
-label = NodePath("../CharacterBody2D/Label")
+[node name="StateMachine" type="Node" parent="Player"]
 
 [node name="Idle" type="Node" parent="Player/StateMachine"]
 script = ExtResource("3_i3aeo")
@@ -84,24 +77,28 @@ offset_right = 24.0
 offset_bottom = -90.0
 text = "test"
 
-[node name="StateMachine" type="Node" parent="BlackSwan" node_paths=PackedStringArray("sweepAttack", "summonDancers", "shootFeathers", "radiateFeathers", "body", "animator", "label")]
+[node name="StateMachine" type="Node" parent="BlackSwan" node_paths=PackedStringArray("phase1", "body", "animator", "label")]
 script = ExtResource("6_0c07c")
-sweepAttack = NodePath("Sweep")
-summonDancers = NodePath("Summon")
-shootFeathers = NodePath("Shoot")
-radiateFeathers = NodePath("Radiate")
+phase1 = NodePath("Phase1")
 body = NodePath("../CharacterBody2D")
 animator = NodePath("../CharacterBody2D/Sprite2D")
 label = NodePath("../CharacterBody2D/Label")
 
-[node name="Sweep" type="Node" parent="BlackSwan/StateMachine"]
+[node name="Phase1" type="Node" parent="BlackSwan/StateMachine" node_paths=PackedStringArray("sweepAttack", "summonDancers", "shootFeathers", "radiateFeathers")]
+script = ExtResource("8_yb21e")
+sweepAttack = NodePath("Sweep")
+summonDancers = NodePath("Summon")
+shootFeathers = NodePath("Shoot")
+radiateFeathers = NodePath("Radiate")
+
+[node name="Sweep" type="Node" parent="BlackSwan/StateMachine/Phase1"]
 script = ExtResource("7_2cgwh")
 
-[node name="Summon" type="Node" parent="BlackSwan/StateMachine"]
+[node name="Summon" type="Node" parent="BlackSwan/StateMachine/Phase1"]
 script = ExtResource("8_iaow0")
 
-[node name="Shoot" type="Node" parent="BlackSwan/StateMachine"]
+[node name="Shoot" type="Node" parent="BlackSwan/StateMachine/Phase1"]
 script = ExtResource("10_qpfo2")
 
-[node name="Radiate" type="Node" parent="BlackSwan/StateMachine"]
+[node name="Radiate" type="Node" parent="BlackSwan/StateMachine/Phase1"]
 script = ExtResource("11_yb21e")

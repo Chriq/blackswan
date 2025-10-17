@@ -14,7 +14,7 @@ public abstract partial class State : Node {
 
     // Hierarchical Components
     public StateMachine machine;
-    public State parent;
+    public StateMachine parent;
     public State state => machine?.state;
 
     public virtual void Enter() { }
@@ -37,10 +37,12 @@ public abstract partial class State : Node {
     }
 
     public void SetCore(Core c) {
+        machine = new();
         core = c;
     }
 
-    public void Initialize() {
+    public void Initialize(/**StateMachine _parent**/) {
+        // parent = _parent;
         complete = false;
         startTime = Time.GetUnixTimeFromSystem();
     }

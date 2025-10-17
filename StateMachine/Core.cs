@@ -17,7 +17,7 @@ public partial class Core : Node {
         }
     }
 
-    public void Set(State s) {
-        machine.Set(s);
+    public void Set(State s, bool forceReset = false) {
+        machine.Set(s, forceReset);
     }
 }

@@ -1,12 +1,21 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 public static class NodeUtil {
     public static T[] GetChildrenOfType<T>(Node n) {
-        return n.GetChildren()
+
+        List<T> children = n.GetChildren()
             .Where(child => child is T)
             .Cast<T>()
-            .ToArray();
+            .ToList();
+
+        foreach (Node child in n.GetChildren()) {
+            T[] grandChildren = GetChildrenOfType<T>(child as Node);
+            children.AddRange(grandChildren);
+        }
+
+        return children.ToArray();
     }
 }

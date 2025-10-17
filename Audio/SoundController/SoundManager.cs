@@ -15,8 +15,11 @@ public partial class SoundManager : Node {
 
 	public override void _Ready() {
 		Instance = this;
+		Play(AudioPath.PHASE1);
+	}
 
-		backgroundMusicPlayer.Stream = GetAudioStream(AudioPath.PHASE1);
+	public void Play(AudioPath audio) {
+		backgroundMusicPlayer.Stream = GetAudioStream(audio);
 		ResetAudioTimer();
 		backgroundMusicPlayer.Play();
 	}

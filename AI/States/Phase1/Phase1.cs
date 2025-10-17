@@ -8,10 +8,15 @@ public partial class Phase1 : State {
     [Export] public RadiateFeathers radiateFeathers;
 
     public override void Enter() {
+        SoundManager.Instance.Play(AudioPath.PHASE1);
         Set(sweepAttack, true);
     }
 
     public override void Do(double delta) {
+        if (core.health.health <= 0f) {
+            complete = true;
+        }
+
         if (state.complete) {
             if (state == sweepAttack) {
                 Set(summonDancers);

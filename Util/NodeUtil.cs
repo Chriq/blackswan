@@ -12,7 +12,7 @@ public static class NodeUtil {
             .ToList();
 
         foreach (Node child in n.GetChildren()) {
-            T[] grandChildren = GetChildrenOfType<T>(child as Node);
+            T[] grandChildren = GetChildrenOfType<T>(child);
             children.AddRange(grandChildren);
         }
 

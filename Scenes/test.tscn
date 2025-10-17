@@ -1,0 +1,107 @@
+[gd_scene load_steps=14 format=3 uid="uid://dj4j7w4tbfct0"]
+
+[ext_resource type="PackedScene" uid="uid://y0rpm7kbjq7k" path="res://Audio/SoundController/SoundManager.tscn" id="1_2cgwh"]
+[ext_resource type="Texture2D" uid="uid://b2sj05bpwqe4r" path="res://icon.svg" id="1_8od7v"]
+[ext_resource type="Script" uid="uid://orcsg6jou2lg" path="res://Player/PlayerController.cs" id="2_35xla"]
+[ext_resource type="Script" uid="uid://c7k44gmh4bkla" path="res://StateMachine/States/IdleState.cs" id="3_i3aeo"]
+[ext_resource type="Script" uid="uid://buu5kr5termgt" path="res://StateMachine/States/RunState.cs" id="4_5wyu1"]
+[ext_resource type="Script" uid="uid://p5m53nuvlumw" path="res://StateMachine/States/DashState.cs" id="5_0c07c"]
+[ext_resource type="Script" uid="uid://dsn6ndtay4j4o" path="res://AI/BlackSwan.cs" id="6_0c07c"]
+[ext_resource type="Script" uid="uid://b5v3bepxkayu7" path="res://AI/States/Phase1/SweepAttack.cs" id="7_2cgwh"]
+[ext_resource type="Script" uid="uid://1yxoby74dj08" path="res://AI/States/Phase1/SummonDancers.cs" id="8_iaow0"]
+[ext_resource type="Script" uid="uid://d3hr455btscyu" path="res://AI/States/Phase1/ShootFeathers.cs" id="10_qpfo2"]
+[ext_resource type="Script" uid="uid://dwqvk8ritp8w7" path="res://AI/States/Phase1/RadiateFeathers.cs" id="11_yb21e"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ys1qc"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_35xla"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_8od7v")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="SoundManager" parent="." instance=ExtResource("1_2cgwh")]
+
+[node name="Player" type="Node" parent="."]
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="Player"]
+visible = false
+position = Vector2(486, 306)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/CharacterBody2D"]
+shape = SubResource("CapsuleShape2D_ys1qc")
+
+[node name="Sprite2D" type="AnimatedSprite2D" parent="Player/CharacterBody2D"]
+sprite_frames = SubResource("SpriteFrames_35xla")
+
+[node name="Label" type="Label" parent="Player/CharacterBody2D"]
+offset_left = -16.0
+offset_top = -113.0
+offset_right = 24.0
+offset_bottom = -90.0
+text = "test"
+
+[node name="StateMachine" type="Node" parent="Player" node_paths=PackedStringArray("runState", "idleState", "dashState", "body", "animator", "label")]
+script = ExtResource("2_35xla")
+runState = NodePath("Run")
+idleState = NodePath("Idle")
+dashState = NodePath("Dash")
+body = NodePath("../CharacterBody2D")
+animator = NodePath("../CharacterBody2D/Sprite2D")
+label = NodePath("../CharacterBody2D/Label")
+
+[node name="Idle" type="Node" parent="Player/StateMachine"]
+script = ExtResource("3_i3aeo")
+
+[node name="Run" type="Node" parent="Player/StateMachine"]
+script = ExtResource("4_5wyu1")
+
+[node name="Dash" type="Node" parent="Player/StateMachine"]
+script = ExtResource("5_0c07c")
+
+[node name="BlackSwan" type="Node" parent="."]
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="BlackSwan"]
+position = Vector2(486, 306)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BlackSwan/CharacterBody2D"]
+shape = SubResource("CapsuleShape2D_ys1qc")
+
+[node name="Sprite2D" type="AnimatedSprite2D" parent="BlackSwan/CharacterBody2D"]
+sprite_frames = SubResource("SpriteFrames_35xla")
+
+[node name="Label" type="Label" parent="BlackSwan/CharacterBody2D"]
+offset_left = -16.0
+offset_top = -113.0
+offset_right = 24.0
+offset_bottom = -90.0
+text = "test"
+
+[node name="StateMachine" type="Node" parent="BlackSwan" node_paths=PackedStringArray("sweepAttack", "summonDancers", "shootFeathers", "radiateFeathers", "body", "animator", "label")]
+script = ExtResource("6_0c07c")
+sweepAttack = NodePath("Sweep")
+summonDancers = NodePath("Summon")
+shootFeathers = NodePath("Shoot")
+radiateFeathers = NodePath("Radiate")
+body = NodePath("../CharacterBody2D")
+animator = NodePath("../CharacterBody2D/Sprite2D")
+label = NodePath("../CharacterBody2D/Label")
+
+[node name="Sweep" type="Node" parent="BlackSwan/StateMachine"]
+script = ExtResource("7_2cgwh")
+
+[node name="Summon" type="Node" parent="BlackSwan/StateMachine"]
+script = ExtResource("8_iaow0")
+
+[node name="Shoot" type="Node" parent="BlackSwan/StateMachine"]
+script = ExtResource("10_qpfo2")
+
+[node name="Radiate" type="Node" parent="BlackSwan/StateMachine"]
+script = ExtResource("11_yb21e")

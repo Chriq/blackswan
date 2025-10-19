@@ -25,6 +25,8 @@ public partial class PlayerController : Core {
 
         if (Input.IsActionJustPressed("Attack")) {
             machine.Set(attackState, true);
+        } else if (Input.IsActionJustPressed("Dash")) {
+            machine.Set(dashState, true);
         } else if (x != 0f || y != 0f) {
             machine.Set(runState);
         }

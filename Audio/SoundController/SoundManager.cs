@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 
 public partial class SoundManager : Node {
-	[Export] private AudioStreamPlayer backgroundMusicPlayer;
+	[Export] public AudioStreamPlayer backgroundMusicPlayer;
 	[Export] private AudioStreamPlayer soundEffectsPlayer;
 
 	public static SoundManager Instance;
@@ -20,8 +20,8 @@ public partial class SoundManager : Node {
 
 	public void Play(AudioPath audio) {
 		backgroundMusicPlayer.Stream = GetAudioStream(audio);
-		ResetAudioTimer();
 		backgroundMusicPlayer.Play();
+		ResetAudioTimer();
 	}
 
 	public double GetPlaybackTime() {
@@ -40,7 +40,7 @@ public partial class SoundManager : Node {
 		return backgroundMusicPlayer.Stream.GetLength();
 	}
 
-	private static AudioStream GetAudioStream(AudioPath audioPath) {
+	public static AudioStream GetAudioStream(AudioPath audioPath) {
 		if (audioPath == AudioPath.NONE) {
 			return null;
 		}

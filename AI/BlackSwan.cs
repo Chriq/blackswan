@@ -24,8 +24,6 @@ public partial class BlackSwan : Core {
             } else {
                 Set(outro, true);
             }
-
-            health.ResetHealth();
         }
 
         state.DoBranch(delta);

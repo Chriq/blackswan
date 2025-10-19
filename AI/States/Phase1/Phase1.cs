@@ -13,7 +13,7 @@ public partial class Phase1 : State {
     }
 
     public override void Do(double delta) {
-        if (core.health.health <= 0f) {
+        if (core.healthComponent.health <= 0f) {
             complete = true;
         }
 

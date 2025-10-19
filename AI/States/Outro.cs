@@ -6,10 +6,4 @@ public partial class Outro : State {
         SoundManager.Instance.Play(AudioPath.OUTRO);
         core.label.Text = "Outro";
     }
-
-    public override void Do(double delta) {
-        if (core.health.health <= 0f) {
-            complete = true;
-        }
-    }
 }

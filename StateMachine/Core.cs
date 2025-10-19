@@ -4,7 +4,9 @@ public partial class Core : Node {
     [Export] public CharacterBody2D body;
     [Export] public AnimatedSprite2D animator;
     [Export] public Label label;
-    [Export] public HealthComponent health;
+    [Export] public HealthComponent healthComponent;
+
+    public Vector2 direction { get; protected set; }
 
     public StateMachine machine;
     public State state => machine.state;

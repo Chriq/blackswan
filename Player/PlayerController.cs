@@ -4,16 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 
 public partial class PlayerController : Core {
-
-    [Export] float speed = 120;
-    [Export] float friction = 0.2f;
-    [Export] float acceleration = 0.5f;
-
     /** State Machine **/
     [Export] RunState runState;
     [Export] IdleState idleState;
     [Export] DashState dashState;
-
+    [Export] Attack attackState;
 
 
     public override void _Ready() {
@@ -21,26 +16,23 @@ public partial class PlayerController : Core {
         machine.Set(idleState);
     }
 
-    public void SelectState(float axis) {
-        if (axis != 0f) {
-            machine.Set(runState);
-        } else {
+    public void SelectState() {
+        float x = Input.GetAxis("Left", "Right");
+        float y = Input.GetAxis("Up", "Down");
 
+        Vector2 input = new Vector2(x, y);
+        if (input != Vector2.Zero) direction = input.Normalized();
+
+        if (Input.IsActionJustPressed("Attack")) {
+            machine.Set(attackState, true);
+        } else if (x != 0f || y != 0f) {
+            machine.Set(runState);
         }
     }
 
 
     public override void _PhysicsProcess(double delta) {
-        Move((float)delta);
-    }
-
-    private void Move(float delta) {
-        float input = Input.GetAxis("Left", "Right");
-        animator.FlipH = input < 0f || (input == 0f && animator.FlipH);
-
-        SelectState(input);
-        machine.state.PhysicsDo(delta);
-
-        body.MoveAndSlide();
+        SelectState();
+        state.PhysicsDoBranch(delta);
     }
 }

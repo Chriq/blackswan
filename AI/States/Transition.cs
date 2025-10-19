@@ -7,8 +7,12 @@ public partial class Transition : State {
         core.label.Text = "Transition";
     }
 
+    // TODO: Refactor for seamless audio transitions
     public override void Do(double delta) {
-        if (core.health.health <= 0f) {
+        double cutoff = SoundManager.Instance.GetStreamDuration();
+        double time = SoundManager.Instance.GetPlaybackTime();
+
+        if (time >= cutoff - 0.1f) {
             complete = true;
         }
     }

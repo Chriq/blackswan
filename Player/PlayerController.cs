@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 
 public partial class PlayerController : Core {
+    [Export] PlayerInput playerInput;
+
     /** State Machine **/
     [Export] RunState runState;
     [Export] IdleState idleState;
@@ -17,18 +19,20 @@ public partial class PlayerController : Core {
     }
 
     public void SelectState() {
-        float x = Input.GetAxis("Left", "Right");
-        float y = Input.GetAxis("Up", "Down");
+        Vector2 input = playerInput.GetInputAxis();
 
-        Vector2 input = new Vector2(x, y);
-        if (input != Vector2.Zero) direction = input.Normalized();
+        runState.direction = input;
 
-        if (Input.IsActionJustPressed("Attack")) {
-            machine.Set(attackState, true);
-        } else if (Input.IsActionJustPressed("Dash")) {
-            machine.Set(dashState, true);
-        } else if (x != 0f || y != 0f) {
+        if (input != Vector2.Zero) direction = input;
+
+        if (IsAttacking()) {
+            machine.Set(attackState);
+        } else if (IsDashing()) {
+            machine.Set(dashState);
+        } else if (input != Vector2.Zero) {
             machine.Set(runState);
+        } else {
+            machine.Set(idleState);
         }
     }
 
@@ -36,5 +40,13 @@ public partial class PlayerController : Core {
     public override void _PhysicsProcess(double delta) {
         SelectState();
         state.PhysicsDoBranch(delta);
+    }
+
+    private bool IsAttacking() {
+        return Input.IsActionJustPressed("Attack") || (state == attackState && !state.complete);
+    }
+
+    private bool IsDashing() {
+        return Input.IsActionJustPressed("Dash") || (state == dashState && !state.complete);
     }
 }

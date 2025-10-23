@@ -3,6 +3,7 @@ using System;
 
 public partial class Intro : State {
     public override void Enter() {
+        PlayerInput.Instance.Disable();
         SoundManager.Instance.Play(AudioPath.INTRO);
         core.label.Text = "Intro";
     }
@@ -15,5 +16,9 @@ public partial class Intro : State {
         if (time >= cutoff - 0.1f) {
             complete = true;
         }
+    }
+
+    public override void Exit() {
+        PlayerInput.Instance.Enable();
     }
 }

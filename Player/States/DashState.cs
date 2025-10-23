@@ -2,16 +2,16 @@ using Godot;
 using System;
 
 public partial class DashState : State {
-    const float ACCELERATION = 10f;
-    const float FRICTION = 22.5f;
-    const float DASH_SPEED = 800f;
+    const float ACCELERATION = 0.9f;
+    const float FRICTION = 1f;
+    const float DASH_SPEED = 1000f;
     const float DASH_TIME = 0.12f;
 
     private double dashTimer = 0f;
     private Vector2 dashDirection = Vector2.Right;
 
     public override void Enter() {
-        dashDirection = core.direction.Normalized();
+        dashDirection = core.direction;
     }
 
     public override void PhysicsDo(double delta) {
@@ -29,11 +29,14 @@ public partial class DashState : State {
         }
 
         if (body.Velocity.Length() <= 0.1f) {
-            dashTimer = 0d;
-            body.Velocity = Vector2.Zero;
             complete = true;
         }
 
         core.body.MoveAndSlide();
+    }
+
+    public override void Exit() {
+        dashTimer = 0d;
+        body.Velocity = Vector2.Zero;
     }
 }

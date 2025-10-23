@@ -1,12 +1,14 @@
-[gd_scene load_steps=25 format=3 uid="uid://dj4j7w4tbfct0"]
+[gd_scene load_steps=35 format=3 uid="uid://dj4j7w4tbfct0"]
 
 [ext_resource type="PackedScene" uid="uid://y0rpm7kbjq7k" path="res://Audio/SoundController/SoundManager.tscn" id="1_2cgwh"]
-[ext_resource type="Texture2D" uid="uid://b2sj05bpwqe4r" path="res://icon.svg" id="1_8od7v"]
+[ext_resource type="Texture2D" uid="uid://c0qwpi6isuqx5" path="res://Player/player.png" id="2_copon"]
 [ext_resource type="Script" uid="uid://orcsg6jou2lg" path="res://Player/PlayerController.cs" id="3_2ocox"]
 [ext_resource type="Script" uid="uid://c7k44gmh4bkla" path="res://Player/States/IdleState.cs" id="3_i3aeo"]
 [ext_resource type="Script" uid="uid://xjumoifbb5r2" path="res://Combat/DamageComponent.cs" id="3_kuf18"]
 [ext_resource type="Script" uid="uid://buu5kr5termgt" path="res://Player/States/RunState.cs" id="4_5wyu1"]
+[ext_resource type="Texture2D" uid="uid://dmh5oy5hjqsk0" path="res://Combat/playerAttack.png" id="4_wjyqs"]
 [ext_resource type="Script" uid="uid://p5m53nuvlumw" path="res://Player/States/DashState.cs" id="5_0c07c"]
+[ext_resource type="Script" uid="uid://b3bghkr8l8euk" path="res://Player/PlayerInput.cs" id="5_n0wup"]
 [ext_resource type="Script" uid="uid://dsn6ndtay4j4o" path="res://AI/BlackSwan.cs" id="6_0c07c"]
 [ext_resource type="Script" uid="uid://b5v3bepxkayu7" path="res://AI/States/Phase1/SweepAttack.cs" id="7_2cgwh"]
 [ext_resource type="Script" uid="uid://b76c3u46orkh4" path="res://Player/States/Attack.cs" id="7_kuf18"]
@@ -16,18 +18,19 @@
 [ext_resource type="Script" uid="uid://4aq2sgi66lce" path="res://Combat/HealthComponent.cs" id="9_q8sys"]
 [ext_resource type="Script" uid="uid://d3hr455btscyu" path="res://AI/States/Phase1/ShootFeathers.cs" id="10_qpfo2"]
 [ext_resource type="Script" uid="uid://dwqvk8ritp8w7" path="res://AI/States/Phase1/RadiateFeathers.cs" id="11_yb21e"]
+[ext_resource type="SpriteFrames" uid="uid://c42qdm5alao3c" path="res://AI/Animators/blackSwanAnim.tres" id="12_kxtw2"]
 [ext_resource type="Script" uid="uid://biwgfnoxv6wrf" path="res://AI/States/Transition.cs" id="14_2ocox"]
 [ext_resource type="Script" uid="uid://cwtax78j0snjt" path="res://AI/States/Phase2/Phase2.cs" id="15_kuf18"]
 [ext_resource type="Script" uid="uid://bd1ot4hmw2fu5" path="res://AI/States/Outro.cs" id="16_q8sys"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_q8sys"]
-size = Vector2(124, 124)
+size = Vector2(11, 34)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_35xla"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_8od7v")
+"texture": ExtResource("2_copon")
 }],
 "loop": true,
 "name": &"default",
@@ -35,12 +38,58 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_n0wup"]
-size = Vector2(50, 143)
+size = Vector2(10, 33.5)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_kuf18"]
-size = Vector2(127, 130)
+[sub_resource type="AtlasTexture" id="AtlasTexture_rhq6j"]
+atlas = ExtResource("4_wjyqs")
+region = Rect2(0, 0, 15, 33)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pgu05"]
+atlas = ExtResource("4_wjyqs")
+region = Rect2(15, 0, 15, 33)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3nkef"]
+atlas = ExtResource("4_wjyqs")
+region = Rect2(30, 0, 15, 33)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vpf1r"]
+atlas = ExtResource("4_wjyqs")
+region = Rect2(45, 0, 15, 33)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m64o6"]
+atlas = ExtResource("4_wjyqs")
+region = Rect2(60, 0, 15, 33)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_55gk5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rhq6j")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pgu05")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3nkef")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vpf1r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m64o6")
+}],
+"loop": false,
+"name": &"default",
+"speed": 20.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_copon"]
+size = Vector2(11.5, 35)
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ys1qc"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wjyqs"]
+size = Vector2(29, 58)
 
 [node name="Node2D" type="Node2D"]
 
@@ -52,13 +101,14 @@ size = Vector2(127, 130)
 position = Vector2(149, 226)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player/CharacterBody2D"]
-position = Vector2(-2, -2)
+position = Vector2(0.5, 0)
 shape = SubResource("RectangleShape2D_q8sys")
 
 [node name="Sprite2D" type="AnimatedSprite2D" parent="Player/CharacterBody2D"]
 sprite_frames = SubResource("SpriteFrames_35xla")
 
 [node name="Label" type="Label" parent="Player/CharacterBody2D"]
+visible = false
 offset_left = -16.0
 offset_top = -113.0
 offset_right = 24.0
@@ -69,20 +119,31 @@ text = "test"
 script = ExtResource("3_kuf18")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player/CharacterBody2D/DamageComponent"]
-position = Vector2(104, -1.5)
+position = Vector2(14, 0.25)
 shape = SubResource("RectangleShape2D_n0wup")
+
+[node name="AttackEffect" type="AnimatedSprite2D" parent="Player/CharacterBody2D/DamageComponent"]
+visible = false
+position = Vector2(12, 0)
+sprite_frames = SubResource("SpriteFrames_55gk5")
+frame = 4
+frame_progress = 1.0
 
 [node name="HealthComponent" type="Area2D" parent="Player/CharacterBody2D" node_paths=PackedStringArray("healthbar")]
 position = Vector2(-1, 1)
 script = ExtResource("9_q8sys")
-healthbar = NodePath("../../../BlackSwan/CharacterBody2D/HealthBar")
+healthbar = NodePath("../Label")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player/CharacterBody2D/HealthComponent"]
-position = Vector2(1.5, -1)
-shape = SubResource("RectangleShape2D_kuf18")
+position = Vector2(2.25, -0.5)
+shape = SubResource("RectangleShape2D_copon")
 
-[node name="StateMachine" type="Node" parent="Player" node_paths=PackedStringArray("runState", "idleState", "dashState", "attackState", "body", "animator", "label", "healthComponent")]
+[node name="PlayerInput" type="Node" parent="Player"]
+script = ExtResource("5_n0wup")
+
+[node name="PlayerController" type="Node" parent="Player" node_paths=PackedStringArray("playerInput", "runState", "idleState", "dashState", "attackState", "body", "animator", "label", "healthComponent")]
 script = ExtResource("3_2ocox")
+playerInput = NodePath("../PlayerInput")
 runState = NodePath("Run")
 idleState = NodePath("Idle")
 dashState = NodePath("Dash")
@@ -92,34 +153,38 @@ animator = NodePath("../CharacterBody2D/Sprite2D")
 label = NodePath("../CharacterBody2D/Label")
 healthComponent = NodePath("../CharacterBody2D/HealthComponent")
 
-[node name="Idle" type="Node" parent="Player/StateMachine"]
+[node name="Idle" type="Node" parent="Player/PlayerController"]
 script = ExtResource("3_i3aeo")
 
-[node name="Run" type="Node" parent="Player/StateMachine"]
+[node name="Run" type="Node" parent="Player/PlayerController"]
 script = ExtResource("4_5wyu1")
 
-[node name="Dash" type="Node" parent="Player/StateMachine"]
+[node name="Dash" type="Node" parent="Player/PlayerController"]
 script = ExtResource("5_0c07c")
 
-[node name="Attack" type="Node" parent="Player/StateMachine" node_paths=PackedStringArray("damage")]
+[node name="Attack" type="Node" parent="Player/PlayerController" node_paths=PackedStringArray("damage", "attackEffect")]
 script = ExtResource("7_kuf18")
 damage = NodePath("../../CharacterBody2D/DamageComponent")
+attackEffect = NodePath("../../CharacterBody2D/DamageComponent/AttackEffect")
 
 [node name="BlackSwan" type="Node" parent="."]
 
 [node name="CharacterBody2D" type="CharacterBody2D" parent="BlackSwan"]
-position = Vector2(486, 306)
+position = Vector2(349, 192)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BlackSwan/CharacterBody2D"]
 shape = SubResource("CapsuleShape2D_ys1qc")
 disabled = true
 
 [node name="Sprite2D" type="AnimatedSprite2D" parent="BlackSwan/CharacterBody2D"]
-sprite_frames = SubResource("SpriteFrames_35xla")
+sprite_frames = ExtResource("12_kxtw2")
+animation = &"p1"
 
 [node name="StateLabel" type="Label" parent="BlackSwan/CharacterBody2D"]
-offset_right = 40.0
-offset_bottom = 23.0
+offset_left = -15.0
+offset_top = -164.0
+offset_right = 25.0
+offset_bottom = -141.0
 
 [node name="HealthBar" type="Label" parent="BlackSwan/CharacterBody2D"]
 offset_left = -16.0
@@ -134,8 +199,8 @@ script = ExtResource("9_q8sys")
 healthbar = NodePath("../HealthBar")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BlackSwan/CharacterBody2D/HealthComponent"]
-position = Vector2(1.5, -1)
-shape = SubResource("RectangleShape2D_kuf18")
+position = Vector2(-1.5, -2)
+shape = SubResource("RectangleShape2D_wjyqs")
 
 [node name="StateMachine" type="Node" parent="BlackSwan" node_paths=PackedStringArray("intro", "phase1", "transition", "phase2", "outro", "body", "animator", "label", "healthComponent")]
 script = ExtResource("6_0c07c")

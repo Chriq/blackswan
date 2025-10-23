@@ -3,6 +3,7 @@ using System;
 
 public partial class Transition : State {
     public override void Enter() {
+        PlayerInput.Instance.Disable();
         SoundManager.Instance.Play(AudioPath.TRANSITION);
         core.label.Text = "Transition";
     }
@@ -15,5 +16,9 @@ public partial class Transition : State {
         if (time >= cutoff - 0.1f) {
             complete = true;
         }
+    }
+
+    public override void Exit() {
+        PlayerInput.Instance.Enable();
     }
 }

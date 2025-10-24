@@ -8,7 +8,7 @@ public partial class BlackSwan : Core {
     [Export] Phase2 phase2;
     [Export] Outro outro;
 
-    private bool devMode = false;
+    private bool devMode = true;
 
     public override void _Ready() {
         SetupInstances();
@@ -20,7 +20,6 @@ public partial class BlackSwan : Core {
         if (state.complete) {
             if (state == intro) {
                 Set(phase1, true);
-                animator.Play("p1");
             } else if (state == phase1) {
                 Set(transition, true);
             } else if (state == transition) {

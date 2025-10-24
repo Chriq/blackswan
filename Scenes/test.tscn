@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://dj4j7w4tbfct0"]
+[gd_scene load_steps=36 format=3 uid="uid://dj4j7w4tbfct0"]
 
 [ext_resource type="PackedScene" uid="uid://y0rpm7kbjq7k" path="res://Audio/SoundController/SoundManager.tscn" id="1_2cgwh"]
 [ext_resource type="Texture2D" uid="uid://c0qwpi6isuqx5" path="res://Player/player.png" id="2_copon"]
@@ -89,7 +89,10 @@ size = Vector2(11.5, 35)
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ys1qc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wjyqs"]
-size = Vector2(29, 58)
+size = Vector2(25, 39)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kxtw2"]
+size = Vector2(27, 6)
 
 [node name="Node2D" type="Node2D"]
 
@@ -176,9 +179,9 @@ position = Vector2(349, 192)
 shape = SubResource("CapsuleShape2D_ys1qc")
 disabled = true
 
-[node name="Sprite2D" type="AnimatedSprite2D" parent="BlackSwan/CharacterBody2D"]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="BlackSwan/CharacterBody2D"]
 sprite_frames = ExtResource("12_kxtw2")
-animation = &"p1"
+animation = &"waltz"
 
 [node name="StateLabel" type="Label" parent="BlackSwan/CharacterBody2D"]
 offset_left = -15.0
@@ -199,10 +202,17 @@ script = ExtResource("9_q8sys")
 healthbar = NodePath("../HealthBar")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BlackSwan/CharacterBody2D/HealthComponent"]
-position = Vector2(-1.5, -2)
+position = Vector2(0.5, -1.5)
 shape = SubResource("RectangleShape2D_wjyqs")
 
-[node name="StateMachine" type="Node" parent="BlackSwan" node_paths=PackedStringArray("intro", "phase1", "transition", "phase2", "outro", "body", "animator", "label", "healthComponent")]
+[node name="DamageComponent" type="Area2D" parent="BlackSwan/CharacterBody2D"]
+script = ExtResource("3_kuf18")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BlackSwan/CharacterBody2D/DamageComponent"]
+position = Vector2(-0.5, 30)
+shape = SubResource("RectangleShape2D_kxtw2")
+
+[node name="StateMachine" type="Node" parent="BlackSwan" node_paths=PackedStringArray("intro", "phase1", "transition", "phase2", "outro", "body", "animator", "label", "healthComponent", "player")]
 script = ExtResource("6_0c07c")
 intro = NodePath("Intro")
 phase1 = NodePath("Phase1")
@@ -210,9 +220,10 @@ transition = NodePath("Transition")
 phase2 = NodePath("Phase2")
 outro = NodePath("Outro")
 body = NodePath("../CharacterBody2D")
-animator = NodePath("../CharacterBody2D/Sprite2D")
+animator = NodePath("../CharacterBody2D/AnimatedSprite2D")
 label = NodePath("../CharacterBody2D/StateLabel")
 healthComponent = NodePath("../CharacterBody2D/HealthComponent")
+player = NodePath("../../Player/CharacterBody2D")
 
 [node name="Intro" type="Node" parent="BlackSwan/StateMachine"]
 script = ExtResource("8_7nf3m")

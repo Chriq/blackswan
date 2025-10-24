@@ -6,6 +6,9 @@ public partial class Core : Node {
     [Export] public Label label;
     [Export] public HealthComponent healthComponent;
 
+
+    [Export] public Node2D player;
+
     public Vector2 direction { get; protected set; }
 
     public StateMachine machine;

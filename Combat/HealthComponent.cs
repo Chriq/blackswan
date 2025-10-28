@@ -2,6 +2,9 @@ using Godot;
 using System;
 
 public partial class HealthComponent : Area2D {
+    [Signal]
+    public delegate void DiedEventHandler();
+
     [Export] Label healthbar;
     [Export] public float health { get; private set; } = 10f;
 
@@ -15,7 +18,7 @@ public partial class HealthComponent : Area2D {
 
         healthbar.Text = health.ToString();
 
-        if (health <= 0f) GD.Print("DEAD");
+        if (health <= 0f) EmitSignal(SignalName.Died);
     }
 
     public void SetHealth(float amt) {

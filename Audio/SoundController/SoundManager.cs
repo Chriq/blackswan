@@ -24,6 +24,10 @@ public partial class SoundManager : Node {
 		ResetAudioTimer();
 	}
 
+	public double GetSecondsPerBeat() {
+		return 60d / 200d;
+	}
+
 	public double GetPlaybackTime() {
 		double duration = GetStreamDuration();
 		double time = (Time.GetTicksUsec() - _timeBegin) / 1000000.0d;

@@ -10,13 +10,11 @@ public partial class Phase1 : State {
     public override void Enter() {
         SoundManager.Instance.Play(AudioPath.PHASE1);
         Set(sweepAttack, true);
+
+        core.healthComponent.Died += OnDied;
     }
 
     public override void Do(double delta) {
-        if (core.healthComponent.health <= 0f) {
-            complete = true;
-        }
-
         if (state.complete) {
             if (state == sweepAttack) {
                 Set(summonDancers);
@@ -28,5 +26,9 @@ public partial class Phase1 : State {
                 Set(sweepAttack);
             }
         }
+    }
+
+    private void OnDied() {
+        complete = true;
     }
 }

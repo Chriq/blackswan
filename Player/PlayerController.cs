@@ -1,7 +1,4 @@
 using Godot;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 public partial class PlayerController : Core {
     [Export] PlayerInput playerInput;
@@ -11,11 +8,16 @@ public partial class PlayerController : Core {
     [Export] IdleState idleState;
     [Export] DashState dashState;
     [Export] Attack attackState;
+    [Export] DeadState deadState;
+
+    private bool dead = false;
 
 
     public override void _Ready() {
         SetupInstances();
         machine.Set(idleState);
+
+        healthComponent.Died += OnDied;
     }
 
     public void SelectState() {
@@ -25,7 +27,8 @@ public partial class PlayerController : Core {
 
         if (input != Vector2.Zero) direction = input;
 
-        if (IsAttacking()) {
+        if (IsDead()) {
+        } else if (IsAttacking()) {
             machine.Set(attackState);
         } else if (IsDashing()) {
             machine.Set(dashState);
@@ -48,5 +51,13 @@ public partial class PlayerController : Core {
 
     private bool IsDashing() {
         return Input.IsActionJustPressed("Dash") || (state == dashState && !state.complete);
+    }
+
+    private bool IsDead() {
+        return state == deadState && !state.complete;
+    }
+
+    private void OnDied() {
+        machine.Set(deadState);
     }
 }

@@ -20,12 +20,14 @@ public partial class DamageComponent : Area2D {
         Monitoring = true;
         Monitorable = true;
         // GetChild<CollisionShape2D>(0).Disabled = false;
+        Show();
     }
 
     public void Disable() {
         Monitoring = false;
         Monitorable = false;
         // GetChild<CollisionShape2D>(0).Disabled = true;
+        Hide();
     }
 
 }

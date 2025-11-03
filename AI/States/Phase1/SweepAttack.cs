@@ -30,7 +30,7 @@ public partial class SweepAttack : State {
 
         int beat = (int)(beatsPassed % 3) + 1;
         if (beat != currentBeat) {
-            GD.Print(beat);
+            //GD.Print(beat);
             HandleColliders();
         }
         currentBeat = beat;

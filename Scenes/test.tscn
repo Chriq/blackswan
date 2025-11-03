@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://dj4j7w4tbfct0"]
+[gd_scene load_steps=42 format=3 uid="uid://dj4j7w4tbfct0"]
 
 [ext_resource type="PackedScene" uid="uid://y0rpm7kbjq7k" path="res://Audio/SoundController/SoundManager.tscn" id="1_2cgwh"]
 [ext_resource type="Texture2D" uid="uid://c0qwpi6isuqx5" path="res://Player/player.png" id="2_copon"]
@@ -26,8 +26,8 @@
 [ext_resource type="Script" uid="uid://cwtax78j0snjt" path="res://AI/States/Phase2/Phase2.cs" id="15_kuf18"]
 [ext_resource type="Script" uid="uid://bd1ot4hmw2fu5" path="res://AI/States/Outro.cs" id="16_q8sys"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_q8sys"]
-size = Vector2(11, 34)
+[sub_resource type="CircleShape2D" id="CircleShape2D_rhq6j"]
+radius = 7.0
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_35xla"]
 animations = [{
@@ -89,7 +89,8 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_copon"]
 size = Vector2(11.5, 35)
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ys1qc"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_pgu05"]
+radius = 9.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wjyqs"]
 size = Vector2(25, 39)
@@ -102,6 +103,9 @@ size = Vector2(20, 8.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pgu05"]
 size = Vector2(16, 12)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_3nkef"]
+radius = 34.132095
 
 [node name="Node2D" type="Node2D"]
 
@@ -116,10 +120,11 @@ centered = false
 
 [node name="CharacterBody2D" type="CharacterBody2D" parent="Player"]
 position = Vector2(149, 226)
+collision_mask = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player/CharacterBody2D"]
-position = Vector2(0.5, 0)
-shape = SubResource("RectangleShape2D_q8sys")
+position = Vector2(0, 13)
+shape = SubResource("CircleShape2D_rhq6j")
 
 [node name="Sprite2D" type="AnimatedSprite2D" parent="Player/CharacterBody2D"]
 sprite_frames = SubResource("SpriteFrames_35xla")
@@ -192,10 +197,12 @@ script = ExtResource("13_rhq6j")
 
 [node name="CharacterBody2D" type="CharacterBody2D" parent="BlackSwan"]
 position = Vector2(349, 192)
+collision_layer = 2
+collision_mask = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BlackSwan/CharacterBody2D"]
-shape = SubResource("CapsuleShape2D_ys1qc")
-disabled = true
+position = Vector2(0, 26)
+shape = SubResource("CircleShape2D_pgu05")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="BlackSwan/CharacterBody2D"]
 sprite_frames = ExtResource("12_kxtw2")
@@ -241,6 +248,13 @@ shape = SubResource("RectangleShape2D_rhq6j")
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="BlackSwan/CharacterBody2D/HandHitbox"]
 position = Vector2(14, 0)
 shape = SubResource("RectangleShape2D_pgu05")
+
+[node name="ProximitySensor" type="Area2D" parent="BlackSwan/CharacterBody2D"]
+collision_layer = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BlackSwan/CharacterBody2D/ProximitySensor"]
+position = Vector2(0, 26)
+shape = SubResource("CircleShape2D_3nkef")
 
 [node name="StateMachine" type="Node" parent="BlackSwan" node_paths=PackedStringArray("intro", "phase1", "transition", "phase2", "outro", "body", "animator", "label", "healthComponent", "player")]
 script = ExtResource("6_0c07c")

@@ -58,6 +58,6 @@ public partial class PlayerController : Core {
     }
 
     private void OnDied() {
-        machine.Set(deadState);
+        //machine.Set(deadState);
     }
 }

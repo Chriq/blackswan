@@ -5,6 +5,8 @@ public partial class Attack : State {
     [Export] DamageComponent damage;
     [Export] AnimatedSprite2D attackEffect;
 
+    private float knockback = 2f;
+
     public override void Enter() {
         damage.Enable();
         damage.Rotation = core.direction.Angle();
@@ -20,14 +22,12 @@ public partial class Attack : State {
     }
 
     public override void Exit() {
-        GD.Print("Exit");
         damage.Disable();
 
         attackEffect.Hide();
     }
 
-    // private void DealDamage(Area2D area) {
-    //     HealthComponent healthComponent = area as HealthComponent;
-    //     damage.DealDamageTo(healthComponent);
-    // }
+    private void OnDamageDealt(float a) {
+        core.body.Velocity += core.direction * knockback;
+    }
 }

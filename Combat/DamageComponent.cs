@@ -4,6 +4,8 @@ using System;
 public partial class DamageComponent : Area2D {
     [Export] public float damage = 2f;
 
+    [Signal] public delegate void DamageDealtEventHandler(float amount);
+
     public override void _Ready() {
         Disable();
         AreaEntered += DealDamageTo;
@@ -13,6 +15,7 @@ public partial class DamageComponent : Area2D {
         HealthComponent healthComponent = a as HealthComponent;
         if (healthComponent != null) {
             healthComponent.TakeDamage(damage);
+            EmitSignal(SignalName.DamageDealt, damage);
         }
     }
 

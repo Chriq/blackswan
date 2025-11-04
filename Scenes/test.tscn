@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=3 uid="uid://dj4j7w4tbfct0"]
+[gd_scene load_steps=44 format=3 uid="uid://dj4j7w4tbfct0"]
 
 [ext_resource type="PackedScene" uid="uid://y0rpm7kbjq7k" path="res://Audio/SoundController/SoundManager.tscn" id="1_2cgwh"]
 [ext_resource type="Texture2D" uid="uid://c0qwpi6isuqx5" path="res://Player/player.png" id="2_copon"]
@@ -25,6 +25,8 @@
 [ext_resource type="PackedScene" uid="uid://6k4afla208tk" path="res://Combat/DamageComponent.tscn" id="14_kxtw2"]
 [ext_resource type="Script" uid="uid://cwtax78j0snjt" path="res://AI/States/Phase2/Phase2.cs" id="15_kuf18"]
 [ext_resource type="Script" uid="uid://bd1ot4hmw2fu5" path="res://AI/States/Outro.cs" id="16_q8sys"]
+[ext_resource type="PackedScene" uid="uid://bpfb5e3ldsewk" path="res://AI/GhostDancers/GhostDancer.tscn" id="26_pgu05"]
+[ext_resource type="PackedScene" uid="uid://13pd3teey74i" path="res://AI/Feather.tscn" id="28_vpf1r"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_rhq6j"]
 radius = 7.0
@@ -256,6 +258,9 @@ collision_layer = 2
 position = Vector2(0, 26)
 shape = SubResource("CircleShape2D_3nkef")
 
+[node name="Rotator" type="Node2D" parent="BlackSwan/CharacterBody2D"]
+position = Vector2(0, 10)
+
 [node name="StateMachine" type="Node" parent="BlackSwan" node_paths=PackedStringArray("intro", "phase1", "transition", "phase2", "outro", "body", "animator", "label", "healthComponent", "player")]
 script = ExtResource("6_0c07c")
 intro = NodePath("Intro")
@@ -281,17 +286,23 @@ radiateFeathers = NodePath("Radiate")
 
 [node name="Sweep" type="Node" parent="BlackSwan/StateMachine/Phase1" node_paths=PackedStringArray("feetHitbox", "handHitbox")]
 script = ExtResource("7_2cgwh")
+speed = 100.0
 feetHitbox = NodePath("../../../CharacterBody2D/FootHitbox")
 handHitbox = NodePath("../../../CharacterBody2D/HandHitbox")
 
 [node name="Summon" type="Node" parent="BlackSwan/StateMachine/Phase1"]
 script = ExtResource("8_iaow0")
+dancerPrefab = ExtResource("26_pgu05")
+radius = 100.0
+count = 8
 
 [node name="Shoot" type="Node" parent="BlackSwan/StateMachine/Phase1"]
 script = ExtResource("10_qpfo2")
 
-[node name="Radiate" type="Node" parent="BlackSwan/StateMachine/Phase1"]
+[node name="Radiate" type="Node" parent="BlackSwan/StateMachine/Phase1" node_paths=PackedStringArray("rotator")]
 script = ExtResource("11_yb21e")
+rotator = NodePath("../../../CharacterBody2D/Rotator")
+featherPrefab = ExtResource("28_vpf1r")
 
 [node name="Transition" type="Node" parent="BlackSwan/StateMachine"]
 script = ExtResource("14_2ocox")

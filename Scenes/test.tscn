@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=3 uid="uid://dj4j7w4tbfct0"]
+[gd_scene load_steps=47 format=3 uid="uid://dj4j7w4tbfct0"]
 
 [ext_resource type="PackedScene" uid="uid://y0rpm7kbjq7k" path="res://Audio/SoundController/SoundManager.tscn" id="1_2cgwh"]
 [ext_resource type="Texture2D" uid="uid://c0qwpi6isuqx5" path="res://Player/player.png" id="2_copon"]
@@ -11,7 +11,7 @@
 [ext_resource type="Script" uid="uid://p5m53nuvlumw" path="res://Player/States/DashState.cs" id="5_0c07c"]
 [ext_resource type="Script" uid="uid://b3bghkr8l8euk" path="res://Player/PlayerInput.cs" id="5_n0wup"]
 [ext_resource type="Script" uid="uid://dsn6ndtay4j4o" path="res://AI/BlackSwan.cs" id="6_0c07c"]
-[ext_resource type="Script" uid="uid://b5v3bepxkayu7" path="res://AI/States/Phase1/SweepAttack.cs" id="7_2cgwh"]
+[ext_resource type="Script" uid="uid://b5v3bepxkayu7" path="res://AI/States/Phase1/SweepAttack/SweepAttack.cs" id="7_2cgwh"]
 [ext_resource type="Script" uid="uid://b76c3u46orkh4" path="res://Player/States/Attack.cs" id="7_kuf18"]
 [ext_resource type="Script" uid="uid://dnead3o4fps1" path="res://AI/States/Intro.cs" id="8_7nf3m"]
 [ext_resource type="Script" uid="uid://1yxoby74dj08" path="res://AI/States/Phase1/SummonDancers.cs" id="8_iaow0"]
@@ -26,7 +26,14 @@
 [ext_resource type="Script" uid="uid://cwtax78j0snjt" path="res://AI/States/Phase2/Phase2.cs" id="15_kuf18"]
 [ext_resource type="Script" uid="uid://bd1ot4hmw2fu5" path="res://AI/States/Outro.cs" id="16_q8sys"]
 [ext_resource type="PackedScene" uid="uid://bpfb5e3ldsewk" path="res://AI/GhostDancers/GhostDancer.tscn" id="26_pgu05"]
+[ext_resource type="Script" uid="uid://dirnswvqjj0sy" path="res://Player/CameraFollow.cs" id="28_m64o6"]
 [ext_resource type="PackedScene" uid="uid://13pd3teey74i" path="res://AI/Feather.tscn" id="28_vpf1r"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_3nkef"]
+normal = Vector2(1, 0)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_vpf1r"]
+normal = Vector2(-11, 0)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_rhq6j"]
 radius = 7.0
@@ -113,15 +120,29 @@ radius = 34.132095
 
 [node name="SoundManager" parent="." instance=ExtResource("1_2cgwh")]
 
-[node name="Stage" type="Sprite2D" parent="."]
+[node name="Map" type="Node2D" parent="."]
+
+[node name="Stage" type="Sprite2D" parent="Map"]
 position = Vector2(-47, -338)
 texture = ExtResource("2_wjyqs")
 centered = false
+
+[node name="RigidBody2D" type="RigidBody2D" parent="Map"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Map/RigidBody2D"]
+shape = SubResource("WorldBoundaryShape2D_3nkef")
+
+[node name="RigidBody2D2" type="RigidBody2D" parent="Map"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Map/RigidBody2D2"]
+position = Vector2(639, 0)
+shape = SubResource("WorldBoundaryShape2D_vpf1r")
 
 [node name="Player" type="Node" parent="."]
 
 [node name="CharacterBody2D" type="CharacterBody2D" parent="Player"]
 position = Vector2(149, 226)
+scale = Vector2(1.2, 1.2)
 collision_mask = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player/CharacterBody2D"]
@@ -183,6 +204,7 @@ script = ExtResource("3_i3aeo")
 
 [node name="Run" type="Node" parent="Player/PlayerController"]
 script = ExtResource("4_5wyu1")
+speed = 140.0
 
 [node name="Dash" type="Node" parent="Player/PlayerController"]
 script = ExtResource("5_0c07c")
@@ -199,6 +221,7 @@ script = ExtResource("13_rhq6j")
 
 [node name="CharacterBody2D" type="CharacterBody2D" parent="BlackSwan"]
 position = Vector2(349, 192)
+scale = Vector2(1.6, 1.6)
 collision_layer = 2
 collision_mask = 3
 
@@ -286,7 +309,7 @@ radiateFeathers = NodePath("Radiate")
 
 [node name="Sweep" type="Node" parent="BlackSwan/StateMachine/Phase1" node_paths=PackedStringArray("feetHitbox", "handHitbox")]
 script = ExtResource("7_2cgwh")
-speed = 100.0
+speed = 150.0
 feetHitbox = NodePath("../../../CharacterBody2D/FootHitbox")
 handHitbox = NodePath("../../../CharacterBody2D/HandHitbox")
 
@@ -312,3 +335,8 @@ script = ExtResource("15_kuf18")
 
 [node name="Outro" type="Node" parent="BlackSwan/StateMachine"]
 script = ExtResource("16_q8sys")
+
+[node name="Camera2D" type="Camera2D" parent="." node_paths=PackedStringArray("player")]
+position = Vector2(320, 180)
+script = ExtResource("28_m64o6")
+player = NodePath("../Player/CharacterBody2D")
